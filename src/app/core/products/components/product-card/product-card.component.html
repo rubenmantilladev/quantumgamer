@@ -1,7 +1,10 @@
 <div class="product-card">
   <div class="container-img">
     <img [src]="product.img" [alt]="product.name" [title]="product.name" />
-    <button class="btn btn-primary" (click)="viewProduct()">
+    <button
+      class="btn btn-primary"
+      [routerLink]="['/quantum/details', product.id]"
+    >
       Ver producto
     </button>
   </div>

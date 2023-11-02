@@ -1,19 +1,37 @@
 <section class="container">
   <div class="row">
-    <h3 class="title">Resultados de tu búsqueda</h3>
-    <p class="subtitle">
-      ¡Genial! Hemos encontrado
-      <span class="product-length"></span> producto a partir de tu búsqueda
-    </p>
+    <div class="details-image">
+      <div class="container-img">
+        <img [src]="product.img" alt="" />
+      </div>
+    </div>
+    <div class="container-info">
+      <div class="container-names">
+        <h3>{{ 'Belén' }}</h3>
+        <h2 class="detail-name">{{ product.name }}</h2>
+      </div>
+      <div class="detail-price">
+        <p>{{ product.price | currency }}</p>
+      </div>
+      <div class="detail-actions">
+        <button class="btn btn-secondary" (click)="addTodCart(product.id)">
+          Agregar al carrito
+        </button>
+        <button class="btn btn-primary">Comprar</button>
+      </div>
+      <div class="datails-general">
+        <div class="detail-state">
+          <p>Estado: <span class="state">Disponible</span></p>
+        </div>
+      </div>
+    </div>
   </div>
-</section>
-
-<section class="container container-filters">
-  <p style="margin: 0 auto 2rem">TODO: Add filters</p>
-</section>
-
-<section class="container"></section>
-
-<section class="container container-pagination">
-  <p style="margin: 2rem auto">TODO: Add pagination</p>
+  <div class="row">
+    <div class="detail-description">
+      <h3>
+        Acerca de <span class="game-name">{{ product.name }}</span>
+      </h3>
+      <p>{{ product.description }}</p>
+    </div>
+  </div>
 </section>

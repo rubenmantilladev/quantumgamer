@@ -20,7 +20,7 @@ const routes: Routes = [
           ),
       },
       {
-        path: 'details',
+        path: 'details/:id',
         loadChildren: () =>
           import('../pages/product-details/product-details.module').then(
             (m) => m.ProductDetailsModule
