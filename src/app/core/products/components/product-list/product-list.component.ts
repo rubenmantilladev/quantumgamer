@@ -15,7 +15,7 @@ import { Subscription } from 'rxjs';
   template: `
     <section class="container-product-list">
       <product-card
-        *ngFor="let product of productList | slice: 0 : limit"
+        *ngFor="let product of productList | slice: init : limit"
         [product]="product"
       />
     </section>
@@ -45,6 +45,7 @@ import { Subscription } from 'rxjs';
   ],
 })
 export class ProductListComponent implements OnInit, OnChanges, OnDestroy {
+  @Input() init?: number;
   @Input() limit?: number;
   @Input() productList!: ProductCard[];
   @Input() page?: number;
