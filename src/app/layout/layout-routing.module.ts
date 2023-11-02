@@ -42,7 +42,7 @@ const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: 'add-product',
+        redirectTo: 'home',
         pathMatch: 'full',
       },
     ],
