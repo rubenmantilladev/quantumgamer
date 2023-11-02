@@ -14,10 +14,7 @@ import { Subscription } from 'rxjs';
   selector: 'product-list',
   template: `
     <section class="container-product-list">
-      <product-card
-        *ngFor="let product of productList | slice: init : limit"
-        [product]="product"
-      />
+      <product-card *ngFor="let product of productList" [product]="product" />
     </section>
   `,
   styles: [
@@ -59,12 +56,17 @@ export class ProductListComponent implements OnInit, OnChanges, OnDestroy {
       // Change this when pagination is implemented
       this.limit = this.productList.length;
     }
+
+    if (!this.init) {
+      this.init = 0;
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['productList'] || changes['limit']) {
+    if (changes['productList'] || changes['limit'] || changes['init']) {
       this.productList = changes['productList']?.currentValue;
       this.limit = changes['limit']?.currentValue;
+      this.init = changes['init']?.currentValue;
     }
   }
 
@@ -74,7 +76,7 @@ export class ProductListComponent implements OnInit, OnChanges, OnDestroy {
 
   getproducts() {
     this.subscription = this.productSvc.getProducts().subscribe((products) => {
-      this.productList = products;
+      this.productList = products.slice(this.init, this.limit);
     });
   }
 }
