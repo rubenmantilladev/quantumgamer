@@ -13,6 +13,8 @@ export class CreateProductComponent {
   img =
     'https://im.ziffdavisinternational.com/ign_es/screenshot/default/60225-metal-gear-solid-3-subsistence-playstation-2_umwf.jpg';
 
+  allProductsLength = 20;
+
   addProductForm: FormGroup = new FormGroup({
     img: new FormControl('', [Validators.required]),
     name: new FormControl('', [Validators.required]),
@@ -26,7 +28,21 @@ export class CreateProductComponent {
     private _productSvc: ProductService,
     private _notifySvc: NotifyService,
     private _router: Router
-  ) {}
+  ) {
+    this.getProducts();
+  }
+
+  getProducts() {
+    this._productSvc.getProducts().subscribe({
+      next: (res) => {
+        this.allProductsLength = res.length;
+        console.log(this.allProductsLength);
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
+  }
 
   onCreateProdct() {
     if (this.addProductForm.invalid) {
@@ -34,25 +50,14 @@ export class CreateProductComponent {
       return;
     }
 
-    const product = this.addProductForm.value;
-
-    this._productSvc.createProduct(product).subscribe({
-      next: (res) => {
-        console.log(res);
-        this._notifySvc.showSuccess(
-          'El producto se ha creado correctamente',
-          'Producto creado'
-        );
-      },
-      error: (err) => {
-        console.log(err);
-        this._notifySvc.showError(
-          'Ha ocurrido un error al crear el producto',
-          'Error'
-        );
-      },
-    });
-
+    const product = {
+      id: this.allProductsLength + 1,
+      img: this.addProductForm.value.img,
+      name: this.addProductForm.value.name,
+      description: this.addProductForm.value.description,
+      price: this.addProductForm.value.price,
+    };
+    this._productSvc.setProducts(product);
     this._router.navigate(['/']);
   }
 }

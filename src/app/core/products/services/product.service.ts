@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 import { ProductCard } from '../models/product-card.interface';
 import { Product } from '../models/product.model';
@@ -14,7 +14,7 @@ export class ProductService {
 
   // START: Products array test
   // -----------------------------------------------------------------
-  private products = new BehaviorSubject<ProductCard[]>([
+  private productsList: ProductCard[] = [
     {
       id: 1,
       img: 'https://cloudfront-eu-central-1.images.arcpublishing.com/prisaradiolos40/XVRM4ZSAIRIFVOQ5U5EFOYJ6ZQ.jpg',
@@ -169,17 +169,27 @@ export class ProductService {
         'Un juego de estrategia espacial con batallas épicas en el espacio.',
       price: 54.99,
     },
-  ]);
-  getProducts() {
-    return this.products.asObservable();
+  ];
+  private productsSubject = new BehaviorSubject<ProductCard[]>([]);
+  getProducts(): Observable<ProductCard[]> {
+    return this.productsSubject.asObservable();
   }
-  setProducts(products: ProductCard[]) {
-    this.products.next(products);
+  setProducts(product: ProductCard) {
+    this.productsList.push(product);
+    this.productsSubject.next([...this.productsList]);
+    localStorage.setItem('products', JSON.stringify(this.productsList));
   }
   // -----------------------------------------------------------------
   // FINAL: Products array test
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.productsSubject.next([...this.productsList]);
+    const products = localStorage.getItem('products');
+    if (products) {
+      this.productsList = JSON.parse(products);
+      this.productsSubject.next([...this.productsList]);
+    }
+  }
 
   getAllProducts() {
     const headers = new HttpHeaders({
